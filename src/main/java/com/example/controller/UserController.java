@@ -1,8 +1,9 @@
-package com.example.usersegmentationservice.controller;
+package com.example.controller;
 
-import com.example.usersegmentationservice.model.Segment;
-import com.example.usersegmentationservice.model.User;
-import com.example.usersegmentationservice.service.UserService;
+import com.example.model.dto.SegmentDto;
+import com.example.model.dto.UserDto;
+import com.example.model.requests.CreateUserRequest;
+import com.example.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,18 +18,18 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping(path = "{id}")
-    public List<Segment> getUsersSegments(@PathVariable Long id) {
+    public List<SegmentDto> getUsersSegments(@PathVariable Long id) {
         return userService.getUsersSegments(id);
     }
 
     @PostMapping
-    public User addUser(@RequestBody User user) {
-        return userService.addUser(user);
+    public UserDto addUser(@RequestBody CreateUserRequest request) {
+        return userService.addUser(request.getEmail(), request.getName(), request.getSurname());
     }
 
     @PutMapping(path = "{id}")
