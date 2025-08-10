@@ -19,7 +19,7 @@ public class Segment {
     @Id
     private Long id;
 
-    private String code;
+    private String code; //unique
     private String info;
 
     @ManyToMany(mappedBy = "segments")
