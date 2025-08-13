@@ -32,38 +32,45 @@ public class SegmentController {
     }
 
     @PostMapping
-    public SegmentDto addSegment(@RequestBody @Valid CreateSegmentRequest request) {
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST')")
+    public SegmentDto addSegment(@Valid @RequestBody CreateSegmentRequest request) {
         return segmentService.addNewSegment(request.getCode(), request.getInfo());
     }
 
     @PostMapping("{code}/users")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST')")
     public void addUsersToSegment(@PathVariable String code,
                                   @RequestParam Set<Long> usersId) {
         segmentService.addUsersToSegment(code, usersId);
     }
 
     @PostMapping("{code}/distribute")
-    public void distributeSegmentToUsers(@RequestBody @Valid DistributeSegmentRequest request) {
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST')")
+    public void distributeSegmentToUsers(@Valid @RequestBody DistributeSegmentRequest request) {
         segmentService.assignSegmentToRandomUsers(request.getCode(), request.getPercent());
     }
 
     @PutMapping(path = "{code}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void changeSegment(@PathVariable String code,
-                              @RequestBody @Valid UpdateSegmentRequest request) {
+                              @Valid @RequestBody UpdateSegmentRequest request) {
         segmentService.changeSegment(code, request.getNewCode(), request.getInfo(), request.getUsersId());
     }
 
     @DeleteMapping(path = "{code}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void deleteSegment(@PathVariable String code) {
         segmentService.deleteSegment(code);
     }
 
     @DeleteMapping(path = "{code}/users/all")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST')")
     public void deleteAllUsersInSegment(@PathVariable String code) {
         segmentService.deleteAllUsersInSegment(code);
     }
 
     @DeleteMapping(path = "{code}/users")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST')")
     public void deleteUsersFromSegment(@PathVariable String code,
                                        @RequestParam Set<Long> usersId) {
         segmentService.deleteUsersFromSegment(code, usersId);

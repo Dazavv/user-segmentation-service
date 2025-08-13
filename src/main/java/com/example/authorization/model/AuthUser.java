@@ -15,19 +15,31 @@ public class AuthUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(
+            unique = true,
+            nullable = false,
+            length = 20)
     private String login;
 
-    @Column(nullable = false, length = 100)
+    @Column(
+            nullable = false,
+            length = 100)
     private String password;
 
-    @Column(nullable = false, length = 20)
+    @Column(
+            nullable = false,
+            length = 20)
     private String firstName;
 
-    @Column(nullable = false, length = 20)
+    @Column(
+            nullable = false,
+            length = 20)
     private String lastName;
 
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(
+            unique = true,
+            nullable = false,
+            length = 20)
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)

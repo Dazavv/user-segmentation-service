@@ -27,8 +27,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public JwtResponse login(@NonNull LoginRequest authRequest) {
-        final AuthUser user = authUserService.getByLogin(authRequest.getLogin())
-                .orElseThrow(() -> new AuthException("User was not found"));
+        final AuthUser user = getUser(authRequest.getLogin());
         if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
@@ -80,8 +79,7 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final AuthUser user = authUserService.getByLogin(login)
-                        .orElseThrow(() -> new AuthException("пользователь не найден"));
+                final AuthUser user = getUser(login);
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 return new JwtResponse(accessToken, null);
             }
@@ -95,23 +93,26 @@ public class AuthService {
             final String login = claims.getSubject();
             final String saveRefreshToken = refreshStorage.get(login);
             if (saveRefreshToken != null && saveRefreshToken.equals(refreshToken)) {
-                final AuthUser user = authUserService.getByLogin(login)
-                        .orElseThrow(() -> new AuthException("пользователь не найден"));
+                final AuthUser user = getUser(login);
                 final String accessToken = jwtProvider.generateAccessToken(user);
                 final String newRefreshToken = jwtProvider.generateRefreshToken(user);
                 refreshStorage.put(user.getLogin(), newRefreshToken);
                 return new JwtResponse(accessToken, newRefreshToken);
             }
         }
-        throw new AuthException("невалидный JWT токен");
+        throw new AuthException("JWT was not valid");
     }
     public void changeRoleToUser(@NonNull ChangeRoleRequest request) {
-        final AuthUser user = authUserService.getByLogin(request.getLogin())
-                .orElseThrow(() -> new AuthException("пользователь не найден"));
+        final AuthUser user = getUser(request.getLogin());
         authUserService.addNewRole(user, request.getRole());
     }
 
     public JwtAuthentication getAuthInfo() {
         return (JwtAuthentication) SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    public AuthUser getUser(String login) {
+        return authUserService.getByLogin(login)
+                .orElseThrow(() -> new AuthException("User was not found"));
     }
 }
