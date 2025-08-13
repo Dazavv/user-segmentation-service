@@ -1,6 +1,6 @@
-package com.example.usersegmentationservice.repository;
+package com.example.repository;
 
-import com.example.usersegmentationservice.model.Segment;
+import com.example.model.entity.Segment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

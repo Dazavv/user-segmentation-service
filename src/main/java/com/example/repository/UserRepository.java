@@ -1,7 +1,8 @@
-package com.example.usersegmentationservice.repository;
+package com.example.repository;
 
-import com.example.usersegmentationservice.model.User;
+import com.example.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
 }

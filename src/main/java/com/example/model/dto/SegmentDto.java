@@ -1,4 +1,4 @@
-package com.example.usersegmentationservice.dto;
+package com.example.model.dto;
 
 import lombok.Data;
 
