@@ -1,4 +1,4 @@
-package com.example.model.requests;
+package com.example.segmentation.model.requests;
 
 import lombok.Data;
 

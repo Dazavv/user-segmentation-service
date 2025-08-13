@@ -1,31 +1,32 @@
-package com.example.controller;
+package com.example.segmentation.controller;
 
-import com.example.model.dto.SegmentDto;
-import com.example.model.entity.Segment;
-import com.example.model.entity.User;
-import com.example.model.requests.CreateSegmentRequest;
-import com.example.model.requests.DistributeSegmentRequest;
-import com.example.model.requests.UpdateSegmentRequest;
-import com.example.service.SegmentService;
+import com.example.segmentation.model.dto.SegmentDto;
+import com.example.segmentation.model.requests.CreateSegmentRequest;
+import com.example.segmentation.model.requests.DistributeSegmentRequest;
+import com.example.segmentation.model.requests.UpdateSegmentRequest;
+import com.example.segmentation.service.SegmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping(path = "segments")
+@RequestMapping(path = "api/segments")
 @RequiredArgsConstructor
 public class SegmentController {
     private final SegmentService segmentService;
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST', 'VIEWER')")
     public List<SegmentDto> getAllSegments() {
         return segmentService.getAllSegments();
     }
 
     @GetMapping(path = "{code}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST', 'VIEWER')")
     public SegmentDto getSegmentByCode(@PathVariable String code) {
         return segmentService.getSegmentDtoByCode(code);
     }

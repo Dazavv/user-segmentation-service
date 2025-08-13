@@ -1,12 +1,12 @@
-package com.example.service;
+package com.example.segmentation.service;
 
-import com.example.exceptions.IllegalRequestException;
-import com.example.exceptions.NotFoundException;
-import com.example.model.dto.SegmentDto;
-import com.example.model.entity.Segment;
-import com.example.model.entity.User;
-import com.example.repository.SegmentRepository;
-import com.example.repository.UserRepository;
+import com.example.segmentation.exceptions.IllegalRequestException;
+import com.example.segmentation.exceptions.NotFoundException;
+import com.example.segmentation.model.dto.SegmentDto;
+import com.example.segmentation.model.entity.Segment;
+import com.example.segmentation.model.entity.User;
+import com.example.segmentation.repository.SegmentRepository;
+import com.example.segmentation.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;

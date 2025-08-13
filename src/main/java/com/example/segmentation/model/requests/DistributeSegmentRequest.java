@@ -1,4 +1,4 @@
-package com.example.model.requests;
+package com.example.segmentation.model.requests;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

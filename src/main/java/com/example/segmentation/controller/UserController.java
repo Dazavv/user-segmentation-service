@@ -1,9 +1,8 @@
-package com.example.controller;
+package com.example.segmentation.controller;
 
-import com.example.model.dto.SegmentDto;
-import com.example.model.dto.UserDto;
-import com.example.model.requests.CreateUserRequest;
-import com.example.service.UserService;
+import com.example.segmentation.model.dto.UserDto;
+import com.example.segmentation.model.requests.CreateUserRequest;
+import com.example.segmentation.service.UserService;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "users")
+@RequestMapping(path = "api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;

@@ -1,4 +1,4 @@
-package com.example.model.dto;
+package com.example.segmentation.model.dto;
 
 import lombok.Data;
 

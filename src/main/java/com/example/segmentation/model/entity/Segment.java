@@ -1,4 +1,4 @@
-package com.example.model.entity;
+package com.example.segmentation.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
