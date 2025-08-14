@@ -60,6 +60,7 @@ public class UserService {
 
     public void deleteUser(Long id) {
         User user = getUserById(id);
+        user.getSegments().forEach(segment -> segment.getUsers().remove(user));
         userRepository.deleteById(id);
     }
 
