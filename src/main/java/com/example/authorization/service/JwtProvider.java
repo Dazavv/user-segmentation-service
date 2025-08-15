@@ -1,7 +1,6 @@
 package com.example.authorization.service;
 
 import com.example.authorization.model.AuthUser;
-import com.example.authorization.model.Role;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

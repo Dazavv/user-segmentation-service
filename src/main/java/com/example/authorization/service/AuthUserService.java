@@ -4,7 +4,6 @@ package com.example.authorization.service;
 import com.example.authorization.model.AuthUser;
 import com.example.authorization.model.Role;
 import com.example.authorization.repository.AuthRepository;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
