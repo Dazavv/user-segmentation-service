@@ -1,9 +1,7 @@
 package com.example.segmentation.controller;
 
 import com.example.segmentation.model.dto.SegmentDto;
-import com.example.segmentation.model.requests.CreateSegmentRequest;
-import com.example.segmentation.model.requests.DistributeSegmentRequest;
-import com.example.segmentation.model.requests.UpdateSegmentRequest;
+import com.example.segmentation.model.requests.*;
 import com.example.segmentation.service.SegmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(path = "api/segments")
@@ -39,9 +36,9 @@ public class SegmentController {
 
     @PostMapping("{code}/users")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST')")
-    public void addUsersToSegment(@PathVariable String code,
-                                  @RequestParam Set<Long> usersId) {
-        segmentService.addUsersToSegment(code, usersId);
+    public void addUsersToSegment (@PathVariable String code,
+                                   @Valid @RequestBody GetUsersRequest request) {
+        segmentService.addUsersToSegment(code, request.getUsersId());
     }
 
     @PostMapping("{code}/distribute")
@@ -72,7 +69,7 @@ public class SegmentController {
     @DeleteMapping(path = "{code}/users")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ANALYST')")
     public void deleteUsersFromSegment(@PathVariable String code,
-                                       @RequestParam Set<Long> usersId) {
-        segmentService.deleteUsersFromSegment(code, usersId);
+                                       @Valid @RequestBody GetUsersRequest request) {
+        segmentService.deleteUsersFromSegment(code, request.getUsersId());
     }
 }
