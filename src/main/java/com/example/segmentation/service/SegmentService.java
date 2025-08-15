@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class SegmentService {
     private final SegmentRepository segmentRepository;
     private final UserRepository userRepository;
+    private final AuditService auditService;
     private final UserService userService;
     private final ModelMapper modelMapper;
 
@@ -61,7 +62,15 @@ public class SegmentService {
         segment.setInfo(info);
         Segment savedSegment = segmentRepository.save(segment);
 
+        auditService.logChange(
+                "Segment " + segment.getCode(),
+                segment.getId(),
+                "ADD_SEGMENT",
+                "Segment was added"
+        );
+
         return modelMapper.map(savedSegment, SegmentDto.class);
+
     }
 
     public void changeSegment(String code, String newCode, String info, Set<Long> usersId) {
@@ -83,11 +92,25 @@ public class SegmentService {
         }
 
         segmentRepository.save(segment);
+
+        auditService.logChange(
+                "Segment " + segment.getCode(),
+                segment.getId(),
+                "CHANGE_SEGMENT",
+                "Segment was changed"
+        );
     }
 
     public void deleteSegment(String code) {
         Segment segment = getExistedSegmentByCode(code);
         segmentRepository.delete(segment);
+
+        auditService.logChange(
+                "Segment " + segment.getCode(),
+                segment.getId(),
+                "DELETE_SEGMENT",
+                "Segment was deleted"
+        );
     }
 
     public void assignSegmentToRandomUsers(String code, int percent) {
@@ -127,6 +150,13 @@ public class SegmentService {
             savedSegment.setUsers(new HashSet<>(availableUsers));
         }
         segmentRepository.save(savedSegment);
+
+        auditService.logChange(
+                "Segment " + savedSegment.getCode(),
+                savedSegment.getId(),
+                "ADD_USERS_PERCENT",
+                "Added users percent: " + percent
+        );
     }
 
     public void addUsersToSegment(String code, Set<Long> usersId) {
@@ -135,6 +165,13 @@ public class SegmentService {
 
         segment.getUsers().addAll(usersToAdd);
         segmentRepository.save(segment);
+
+        auditService.logChange(
+                "Segment " + segment.getCode(),
+                segment.getId(),
+                "ADD_USERS",
+                "Added users: " + usersId
+        );
     }
 
     public void deleteUsersFromSegment(String code, Set<Long> usersId) {
@@ -152,6 +189,13 @@ public class SegmentService {
 
         segment.getUsers().removeAll(new HashSet<>(usersToDelete));
         segmentRepository.save(segment);
+
+        auditService.logChange(
+                "Segment " + segment.getCode(),
+                segment.getId(),
+                "DELETE_USERS",
+                "Deleted users: " + usersId
+        );
     }
 
     public Segment getExistedSegmentByCode(String code) {
@@ -165,5 +209,12 @@ public class SegmentService {
         Segment segment = getExistedSegmentByCode(code);
         segment.setUsers(new HashSet<>());
         segmentRepository.save(segment);
+
+        auditService.logChange(
+                "Segment " + segment.getCode(),
+                segment.getId(),
+                "DELETE_ALL_USERS",
+                "All users deleted"
+        );
     }
 }
