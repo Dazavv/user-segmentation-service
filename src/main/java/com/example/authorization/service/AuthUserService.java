@@ -15,7 +15,7 @@ import java.util.Optional;
 public class AuthUserService {
     private final AuthRepository authRepository;
 
-    public Optional<AuthUser> getByLogin(@NonNull String login) {
+    public Optional<AuthUser> getByLogin(String login) {
         return authRepository.findByLogin(login);
     }
 

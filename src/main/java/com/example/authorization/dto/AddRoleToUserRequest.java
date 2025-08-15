@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChangeRoleRequest {
+public class AddRoleToUserRequest {
     private String login;
     private Role role;
 }
