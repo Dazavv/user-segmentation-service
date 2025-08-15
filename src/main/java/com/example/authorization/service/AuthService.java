@@ -1,15 +1,11 @@
 package com.example.authorization.service;
-import com.example.authorization.dto.ChangeRoleRequest;
 import com.example.authorization.dto.JwtResponse;
-import com.example.authorization.dto.LoginRequest;
-import com.example.authorization.dto.RegisterRequest;
 import com.example.authorization.exceptions.AuthException;
 import com.example.authorization.exceptions.RegisterException;
 import com.example.authorization.jwt.JwtAuthentication;
 import com.example.authorization.model.AuthUser;
 import com.example.authorization.model.Role;
 import io.jsonwebtoken.Claims;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,9 +22,9 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public JwtResponse login(@NonNull LoginRequest authRequest) {
-        final AuthUser user = getUser(authRequest.getLogin());
-        if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
+    public JwtResponse login(String login, String password) {
+        final AuthUser user = getUser(login);
+        if (passwordEncoder.matches(password, user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
             refreshStorage.put(user.getLogin(), refreshToken);
@@ -38,18 +34,18 @@ public class AuthService {
         }
     }
 
-    public JwtResponse register(@NonNull RegisterRequest registerRequest) {
-        if (authUserService.checkExistedUser(registerRequest.getLogin(), registerRequest.getEmail())) {
-            throw new RegisterException("User with login: " + registerRequest.getLogin() + " already exists");
+    public JwtResponse register(String login, String password, String email, String firstName, String lastName) {
+        if (authUserService.checkExistedUser(login, email)) {
+            throw new RegisterException("User with login: " + login + " already exists");
         }
 
         AuthUser user = new AuthUser();
-        user.setLogin(registerRequest.getLogin());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setFirstName(registerRequest.getFirstName());
-        user.setLastName(registerRequest.getLastName());
-        user.setEmail(registerRequest.getEmail());
-        user.setRoles(Collections.singleton(Role.ANALYST));
+        user.setLogin(login);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setEmail(email);
+        user.setRoles(Collections.singleton(Role.VIEWER));
 
         authUserService.saveNewUser(user);
 
@@ -60,7 +56,7 @@ public class AuthService {
         return new JwtResponse(accessToken, refreshToken);
     }
 
-    public JwtResponse logout(@NonNull String refreshToken) {
+    public JwtResponse logout(String refreshToken) {
         if (jwtProvider.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
             final String login = claims.getSubject();
@@ -73,7 +69,7 @@ public class AuthService {
         return new JwtResponse(null, null);
     }
 
-    public JwtResponse getAccessToken(@NonNull String refreshToken) {
+    public JwtResponse getAccessToken(String refreshToken) {
         if (jwtProvider.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
             final String login = claims.getSubject();
@@ -87,7 +83,7 @@ public class AuthService {
         return new JwtResponse(null, null);
     }
 
-    public JwtResponse refresh(@NonNull String refreshToken) {
+    public JwtResponse refresh(String refreshToken) {
         if (jwtProvider.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
             final String login = claims.getSubject();
@@ -102,9 +98,9 @@ public class AuthService {
         }
         throw new AuthException("JWT was not valid");
     }
-    public void changeRoleToUser(@NonNull ChangeRoleRequest request) {
-        final AuthUser user = getUser(request.getLogin());
-        authUserService.addNewRole(user, request.getRole());
+    public void addRoleToUser(String login, Role role) {
+        final AuthUser user = getUser(login);
+        authUserService.addNewRole(user, role);
     }
 
     public JwtAuthentication getAuthInfo() {

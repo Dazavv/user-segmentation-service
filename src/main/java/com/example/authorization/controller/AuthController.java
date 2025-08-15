@@ -17,14 +17,19 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
-        final JwtResponse token = authService.login(loginRequest);
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest request) {
+        final JwtResponse token = authService.login(request.getLogin(), request.getPassword());
         return ResponseEntity.ok(token);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest registerRequest) {
-        final JwtResponse token = authService.register(registerRequest);
+    public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest request) {
+        final JwtResponse token = authService.register(
+                request.getLogin(),
+                request.getPassword(),
+                request.getEmail(),
+                request.getFirstName(),
+                request.getLastName());
         return ResponseEntity.ok(token);
     }
 
@@ -46,11 +51,11 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/change-role")
+    @PostMapping("/add-role")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> changeRole(@RequestBody ChangeRoleRequest request) {
-        authService.changeRoleToUser(request);
-        return ResponseEntity.ok("новая роль назначена пользователю");
+    public ResponseEntity<String> addRoleToUser(@RequestBody AddRoleToUserRequest request) {
+        authService.addRoleToUser(request.getLogin(), request.getRole());
+        return ResponseEntity.ok("User with login: " + request.getLogin() + " has new role: " + request.getRole());
     }
 
 
