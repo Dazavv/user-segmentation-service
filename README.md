@@ -73,7 +73,7 @@ jwt.secret.refresh=<BASE64_SECRET>
 
 ### Пример аудита действий с сегментами
 
-| ID  | action        | details               | email       | entity_id | entity_name         | login | Время                   |
+| ID  | action        | details               | email       | entity_id | entity_name         | login | timestamp                   |
 |-----|-----------------|-----------------------|-------------------------|---------|---------------------------|---------------|------------------------|
 | 7   | DELETE_SEGMENT  | Segment was deleted   | user1@gmail.com        | 7       | Segment CHAT_GPT | misha777       | 2025-08-15 21:44:19.900989 |
 | 8   | ADD_SEGMENT  | Segment was added   | admin1@gmail.com        | 8       | Segment CLOUD_DISCOUNT_60  | admin         | 2025-08-15 21:48:56.684644 |
