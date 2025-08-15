@@ -1,7 +1,6 @@
 package com.example.segmentation.service;
 
 import com.example.authorization.jwt.JwtAuthentication;
-import com.example.authorization.model.AuthUser;
 import com.example.segmentation.audit.AuditLog;
 import com.example.segmentation.repository.AuditLogRepository;
 import lombok.RequiredArgsConstructor;
